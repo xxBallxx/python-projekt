@@ -1,3 +1,6 @@
+import pygame
+
+pygame.init()
 class SimpleTile():
     """Einfache Plattform für die Umgebung in der der Spieler sich bewegt"""
 
@@ -8,10 +11,26 @@ class SimpleTile():
     def getUpperEdge(self):
         return self.posY-300
     
-    def getSideEdge(self):
-        return self.posX
+    def getSideEdgeRight(self):
+        return self.posX+60
     
+    def getSideEdgeLeft(self):
+        return self.posX-100
+
+def createRow(startX, yCoordinate, howManyTiles, allTileList):
+
+    rowList = []
+    for x in range(howManyTiles):
+        rowList.append(SimpleTile(startX, yCoordinate))
+        if allTileList != None:
+            allTileList.append(SimpleTile(startX, yCoordinate))
+        startX += 100
+
+    return rowList
+
+def visualizeRow(rowList, pygameDisplay, tileImage):
     
-    
+    for x in range(len(rowList)):
+        pygameDisplay.blit(tileImage,(rowList[x].posX, rowList[x].posY))
 
     

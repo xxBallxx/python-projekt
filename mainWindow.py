@@ -1,6 +1,6 @@
 import pygame
-import environment
-import playerPy
+from environment import *
+from playerPy import *
 
 pygame.init()
 
@@ -13,9 +13,19 @@ playerJumping = pygame.image.load('images/playerJumpingFront.png').convert_alpha
 playerDuck = pygame.image.load('images/playerDuck.png').convert_alpha()
 tile = pygame.image.load('images/tile.png').convert_alpha()
 # initializes the Player
+ALLTILES = []
+person = Player(10, 10)
+gravitation = 5
+tile1 = SimpleTile(10,500)
+tile2 = SimpleTile(110,500)
 
-person = playerPy.Player(10, 10)
-tile1 = environment.SimpleTile(10,500)
+row1 = createRow(410, 700, 3, ALLTILES)
+row2 = createRow(610, 300, 3, ALLTILES)
+
+ALLTILES.append(tile1)
+ALLTILES.append(tile2)
+#ALLTILES.append(row1)
+
 pygame.display.update()
 isRunning = True
 
@@ -43,6 +53,11 @@ while isRunning:
 
     window.fill((255, 255, 255))
     window.blit(tile, (tile1.posX, tile1.posY))
+    window.blit(tile, (tile2.posX, tile2.posY))
+
+    visualizeRow(row1, window, tile)
+    visualizeRow(row2, window, tile)
+
     if person.isStanding:
         window.blit(playerStanding, (person.positionX, person.positionY))
     if person.movesRight:
@@ -51,17 +66,15 @@ while isRunning:
         window.blit(playerMovingLeft, (person.positionX, person.positionY))
     if person.movesDown:
         window.blit(playerDuck, (person.positionX, person.positionY))
-    ball = 1
+    gravitation = 5
     
-    if person.positionY >= tile1.getUpperEdge() and person.positionX > 0 and person.positionX < 10:
-        ball = 0    
+    for x in range(len(ALLTILES)):
+        if person.positionY == ALLTILES[x].getUpperEdge() and person.positionX > ALLTILES[x].getSideEdgeLeft() and person.positionX < ALLTILES[x].getSideEdgeRight():
+            gravitation = 0  
 
-    person.gravitation(ball)
+    person.gravitation(gravitation)
     
-    #if person.positionY < 450:
-    #    person.gravitation(1)
     
-
     pygame.display.update()
 
 
